@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: helpers/index.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: helpers/index.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import moment from "moment";
+
+/**
+* Generates a random code
+*/
+
+export function randomCode() {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+    let r = (Math.random() * 16) | 0,
+      v = c == "x" ? r : (r &amp; 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
+/**
+* Shows the actual date.
+*/
+
+export function displayFormatDate(date) {
+  return moment(date).format(dateFormat());
+}
+
+/**
+* Date format
+*/
+
+export function dateFormat() {
+  return "YYYY-MM-DD";
+}
+
+/**
+* Gets the actual time stamp.
+*/
+
+export function displayFormatTimestamp(timestamp) {
+  return moment(timestamp).format(timestampFormat());
+}
+
+/**
+* Timestamp format (HH:mm:ss).
+*/
+
+export function timestampFormat() {
+  return dateFormat() + " HH:mm:ss";
+}
+
+/**
+* Converts a Json object into a string.
+*/
+
+export function stringifyObjects(json) {
+  return Object.keys(json).reduce(function(strJson, key) {
+    return Object.assign(strJson, { [key]: stringifyIfObject(json[key]) });
+  }, {});
+
+/**
+* Makes it sure that is a Json object that gets converted into a string.
+*/
+
+  function stringifyIfObject(value) {
+    return typeof value === "object" ? JSON.stringify(value) : value;
+  }
+}
+
+/**
+* Returns an already defined variable.
+*/
+
+export function isDefined(variable) {
+  return variable !== undefined;
+}
+
+/**
+* Returns the last login.
+*/
+
+export function lastLogin() {
+  return moment().format("LLL");
+}
+
+/**
+* Last login format.
+*/
+
+export function formatLastLogin(date) {
+  return moment(date).format("LLL");
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#alterController">alterController</a></li><li><a href="global.html#authController">authController</a></li><li><a href="global.html#compare">compare</a></li><li><a href="global.html#config">config</a></li><li><a href="global.html#connection">connection</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#createEnvFile">createEnvFile</a></li><li><a href="global.html#dateFormat">dateFormat</a></li><li><a href="global.html#decode">decode</a></li><li><a href="global.html#delete">delete</a></li><li><a href="global.html#deleteByEmail">deleteByEmail</a></li><li><a href="global.html#deleteById">deleteById</a></li><li><a href="global.html#displayFormatDate">displayFormatDate</a></li><li><a href="global.html#displayFormatTimestamp">displayFormatTimestamp</a></li><li><a href="global.html#encryptPassword">encryptPassword</a></li><li><a href="global.html#errorObject">errorObject</a></li><li><a href="global.html#errorResponse">errorResponse</a></li><li><a href="global.html#find">find</a></li><li><a href="global.html#findByEmail">findByEmail</a></li><li><a href="global.html#forbiddenUser">forbiddenUser</a></li><li><a href="global.html#formatLastLogin">formatLastLogin</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#insert">insert</a></li><li><a href="global.html#isAllowed">isAllowed</a></li><li><a href="global.html#isAuth">isAuth</a></li><li><a href="global.html#isDefined">isDefined</a></li><li><a href="global.html#isLogged">isLogged</a></li><li><a href="global.html#issueJwt">issueJwt</a></li><li><a href="global.html#issueUserJwt">issueUserJwt</a></li><li><a href="global.html#jwtTransformer">jwtTransformer</a></li><li><a href="global.html#lastLogin">lastLogin</a></li><li><a href="global.html#notFound">notFound</a></li><li><a href="global.html#privateUser">privateUser</a></li><li><a href="global.html#publicUser">publicUser</a></li><li><a href="global.html#randomCode">randomCode</a></li><li><a href="global.html#schemaBody">schemaBody</a></li><li><a href="global.html#schemaParams">schemaParams</a></li><li><a href="global.html#select">select</a></li><li><a href="global.html#selectByEmail">selectByEmail</a></li><li><a href="global.html#serverError">serverError</a></li><li><a href="global.html#sql">sql</a></li><li><a href="global.html#stringifyObjects">stringifyObjects</a></li><li><a href="global.html#tableCreation">tableCreation</a></li><li><a href="global.html#timestampFormat">timestampFormat</a></li><li><a href="global.html#tokenFromHeader">tokenFromHeader</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateLastLogin">updateLastLogin</a></li><li><a href="global.html#users">users</a></li><li><a href="global.html#validateToken">validateToken</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 15 2019 16:01:09 GMT-0430 (Hora estándar de Venezuela)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

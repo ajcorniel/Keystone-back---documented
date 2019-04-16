@@ -1,0 +1,1 @@
+UPDATE public.users SET last_login = $1 WHERE email = $2 RETURNING *;

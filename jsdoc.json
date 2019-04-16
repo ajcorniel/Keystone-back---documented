@@ -1,0 +1,5 @@
+    "node ./start.js",
+    "nodemon ./start.js",
+    "node ./database/scripts/reset.js",
+    "node ./database/scripts/init.js",
+    "./node_modules/mocha/bin/mocha"

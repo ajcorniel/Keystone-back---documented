@@ -1,0 +1,1 @@
+UPDATE public.user SET password = $1 WHERE id = $2;
