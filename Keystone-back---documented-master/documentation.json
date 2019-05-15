@@ -1,0 +1,670 @@
+{
+  "swagger": "2.0",
+  "info": {
+  "title": "Keystone API",
+  "description": "An aplication for sell/rent real estates.",
+  "version": "1.0"
+  },
+  
+"tags": [
+  {
+  "name": "private users",
+  "description": "Operations avalaible just for private users."
+  },
+  {
+  "name": "Public users",
+  "description": "Operations avalaible for regular users."
+  }
+  ],
+"schemes": [
+  "https"
+  ],
+"consumes": [
+ "application/json"
+ ],
+"produces": [
+ "application/json"
+],
+"paths": {
+ "/login": {
+    "get": {
+      "tags": [
+      "private users" ],
+      "summary": "Login system.",
+      "parameters": [
+        {
+        "name": "User's info",
+        "in": "body",
+        "description": "User's login info.",
+        "required": true,
+        "schema": {
+        "$ref": "#/definitions/user_info"
+        }
+        },
+        {
+        "name": "Last login",
+        "in": "query",
+        "description": "User's last login",
+        "required": true,
+        "type": "string",
+        "format": "date-time"
+        }
+          ],
+      "responses": {
+        "403": {
+          "description": "Wrong password."
+        },
+        "400": {
+          "description": "That email doesn't exist."
+        },
+        "304": {
+          "description": "This user is already loged in"
+        },
+        "200": {
+          "description": "Successful login."
+        },
+        "500": {
+          "description": "Internal server error"
+        }
+        
+    }
+    }
+ },
+          
+ "/user/delete": {
+    "delete": {
+      "tags": [
+        "private users"
+        ],
+      "summary": "Deletes an user of the database",
+      "parameters": [
+       {
+        "name": "Admin",
+        "in": "query",
+        "description": "Has permission to perform every action that a normal user can do, and can eliminate and create another users.",
+        "required": true,
+        "type": "string"
+        },
+        {
+        "name": "User",
+        "in": "body",
+        "required": true,
+        "description": "A private user can be a normal user or admin user, there can be just one admin user.",
+        "schema":{
+          "$ref": "#/definitions/user"
+        }
+        }
+        ],
+      "responses": {
+        "400": {
+          "description": "Must be loged in to perform this action."
+        },
+        "403": {
+          "description": "Can't delete Admin."
+        },
+        "200": {
+          "description": "Successfully deleted."
+        },
+        "500": {
+          "description": "Server error."
+        },
+        "404": {
+          "description": "User not found"
+        }
+      }
+    }
+ },
+  
+ "/user/singup": {
+    "post": {
+      "tags": [
+       "private users"
+      ],
+      "summary": "Creates a new user into the database",
+      "parameters": [
+        {
+        "in": "query",
+        "name": "Admin",
+        "type": "string",
+        "description": "Has permission to eliminate and create another users",
+        "required": true
+        },
+        {
+        "name": "Singup info",
+        "in": "body",
+        "description": "Form with singup required info.",
+        "required": true,
+        "schema": {
+          "$ref": "#/definitions/Singup_form"
+        }
+        }
+        ],
+      "responses": {
+        "500": {
+          "description": "Internal server error"
+        },
+        "300": {
+          "description": "Another user is using this email."
+        },
+        "304": {
+          "description": "Name/Lastname is required."
+        },
+        "400": {
+          "description": "Bad params (passwords don't match or have the required lenght)."
+        },
+        "404": {
+          "description": "That email doesn't exist."
+        },
+        "200": {
+          "description": "Everything went ok"
+        }
+        }
+    }
+ },
+  
+ "/user/update": {
+    "patch": {
+      "tags": [
+       "private users"
+      ],
+      "summary": "Updates user's info.",
+      "parameters": [
+        {
+        "name": "User's profile",
+        "in": "body",
+        "description": "A private user can be a normal user or admin user, there can be just one admin user.",
+        "required": true,
+        "schema": {
+          "$ref": "#/definitions/user"
+        }
+        }
+          ],
+      "responses": {
+       "200": {
+        "description": "Everything went ok"
+        },
+       "500": {
+         "description": "Internal server error"
+       }
+      }
+    }
+ },
+        
+  
+ "/allusers": {
+    "get": {
+      "tags": [
+        "private users",
+        "Public users"
+      ],
+      "summary": "Retrieves an array with all the users in the database.",
+      "parameters": [
+        {
+        "name": "User",
+        "in": "body",
+        "description": "A private user can be a normal user or admin user, there can be just one admin user.",
+        "schema":{
+          "$ref": "#/definitions/user"
+        }
+        }
+        ],
+      "responses": {
+        "200": {
+          "description": "Everything went ok"
+        },
+        "404": {
+          "description": "Users not found."
+        },
+        "500": {
+          "description": "Internal server error"
+        }
+      }
+    }
+ },
+  
+ "/allusers/showById": {
+    "get": {
+      "tags": [
+        "private users",
+        "Public users"
+      ],
+      "summary": "Retrieves the profile info of one single user.",
+      "parameters": [
+        {
+        "name": "User",
+        "in": "body",
+        "description": "A private user can be a normal user or admin user, there can be just one admin user.",
+        "schema": {
+         "$ref": "#/definitions/user"
+        }
+        }
+         ],
+      "responses": {
+        "200": {
+          "description": "Everything went ok"
+        },
+        "404": {
+          "description": "That ID doesn't exist."
+        },
+        "500": {
+          "description": "Server error."
+        }
+      }
+    }
+ },
+ "/Inmueble/post": {
+   "post": {
+     "tags": [
+       "private users"
+       ],
+      "summary": "Posts a inmueble in the database",
+      "parameters": [
+        {
+         "name":"Inmueble info",
+         "in": "body",
+         "description": "Inmueble's required info.",
+         "schema": {
+           "$ref": "#/definitions/Inmueble"
+         }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Everything went ok."
+          },
+          "400": {
+            "description": "Must be loged in to perform this action."
+          },
+          "300": {
+          "description": "Requires all the requested info."
+        },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+}
+},
+ "/Inmueble/update": {
+   "patch": {
+     "tags": [
+       "private users"
+       ],
+      "summary": "Changes an inmueble's info in the database",
+      "parameters": [
+        {
+         "name":"Inmueble info",
+         "in": "body",
+         "description": "Inmueble's required info.",
+         "schema": {
+           "$ref": "#/definitions/Inmueble"
+         }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Everything went ok."
+          },
+          "400": {
+            "description": "Must be loged in to perform this action."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+}
+},
+ "/Inmueble/delete": {
+   "delete": {
+     "tags": [
+       "private users"
+       ],
+      "summary": "Deletes an inmueble from the database",
+      "parameters": [
+        {
+         "name":"User",
+         "in": "body",
+         "description": "Must be a private user that deletes an inmueble.",
+         "required": true,
+         "schema": {
+           "$ref": "#/definitions/user"
+         }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Everything went ok."
+          },
+          "400": {
+            "description": "Must be loged in to perform this action."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+}
+},
+ "/ShowAllInmuebles": {
+   "get": {
+     "tags": [
+       "private users",
+       "Public users"
+       ],
+      "summary": "Shows the info of all the properties in the database",
+      "parameters": [
+        {
+         "name":"Inmueble info",
+         "in": "body",
+         "description": "Inmueble's info.",
+         "schema": {
+           "$ref": "#/definitions/Inmueble"
+         }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Everything went ok."
+          },
+          "404": {
+            "description": "Inmuebles not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+}
+},
+ "/Inmueble/show": {
+    "get": {
+      "tags": [
+       "private users",
+       "Public users"
+       ],
+      "summary": "Shows a single Inmueble info.",
+      "parameters": [
+        {
+          "name": "Inmueble info",
+          "in": "body",
+          "description": "Inmueble info.",
+          "schema": {
+            "$ref": "#/definitions/Inmueble"
+            }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Everything went ok."
+        },
+        "404": {
+          "description": "Inmueble not found"
+        },
+        "500": {
+          "description": "Internal server error."
+        }
+      }
+   }
+ },
+  "/ShowAllInmuebles/search": {
+    "get": {
+      "tags": [
+        "private users",
+        "Public users"
+        ],
+      "summary": "Searchs a Inmueble in the database.",
+      "parameters": [
+        {
+          "name": "Inmueble info",
+          "in": "body",
+          "description": "Inmueble information",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/Search_form"
+            }
+        }
+        ],
+      "responses": {
+        "200": {
+          "description": "Everything went ok."
+        },
+        "500": {
+          "description": "Server error."
+        },
+        "404": {
+          "description": "Inmuebles not found."
+        },
+        "300": {
+          "description": "Must complete the required form info to search."
+        }
+        
+      }
+    }
+  }
+},
+
+"definitions": {
+  "user_info": {
+    "type": "object",
+    "properties": {
+     "Email": {
+      "type": "string"
+      },
+     "Password": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 20
+      }
+      },
+    "title": "User's login info"
+  },
+  "Singup_form": {
+    "type": "object",
+    "properties": {
+      "Name": {
+        "type": "string"
+      },
+      "Lastname": {
+        "type": "string"
+      },
+      "Email": {
+        "type": "string"
+      },
+      "Password": {
+        "type": "string",
+        "minLength": 10,
+        "maxLength": 20
+      },
+      "Repeat password": {
+        "type": "string",
+        "minLength": 10,
+        "maxLength": 20
+      }
+    },
+    "title": "Singup formulary"
+    
+  },
+  
+  "user": {
+    "type": "object",
+    "properties": {
+     "Name": {
+       "type": "string"
+      },
+     "Lastname": {
+      "type": "string"
+      },
+     "Type": {
+      "type": "object",
+      "properties": {
+        "Admin": {
+          "type": "string"
+        },
+        "Normal user": {
+          "type": "string"
+        }
+      }
+      },
+     "Email": {
+      "type": "string"
+      },
+     "id": {
+      "type": "integer"
+      },
+      "last_login": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "date_created": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "status": {
+        "type": "integer"
+      }
+      },
+    "title": "Private user"
+  },
+  "Inmueble": {
+    "type": "object",
+    "properties": {
+      "Images": {
+        "type": "object",
+        "properties": {
+          "img1": {
+            "type": "string"
+          },
+          "img2": {
+            "type": "string"
+          },
+          "img3": {
+            "type": "string"
+          },
+          "img4": {
+            "type": "string"
+          },
+          "img5": {
+            "type": "string"
+          },
+          "img6": {
+            "type": "string"
+          }
+        }
+      },
+      "Title": {
+        "type": "string",
+        "minLength": 15,
+        "maxLength": 35
+      },
+      "Operation": {
+        "type": "object",
+        "properties": {
+          "Sell": {
+            "type": "string"
+          },
+          "Rent" : {
+            "type": "string"
+          }
+        }
+      },
+      "Kind": {
+        "type": "object",
+          "properties": {
+            "House": {
+              "type": "string"
+            },
+            "Townhouse": {
+              "type": "string"
+            },
+            "Edificio": {
+              "type": "string"
+            },
+            "Terreno": {
+              "type": "string"
+            },
+            "Local": {
+              "type": "string"
+            }
+          }
+      },
+      "Price": {
+        "type": "string"
+          },
+      "M2": {
+        "type": "integer"
+      },
+      "Rooms": {
+        "type": "integer"
+      },
+      "Bathrooms": {
+        "type": "integer"
+      },
+      "Description": {
+        "type": "string",
+          "maxLength": 150,
+          "minLength": 50
+      },
+      "User's info": {
+        "$ref": "#/definitions/user"
+      }
+    },
+    "required": [
+      "User's info"
+    ]
+},
+  "Search_form": {
+    "type": "object",
+    "properties": {
+      "Price": {
+        "type": "object",
+        "properties": {
+          "Minimun price": {
+            "type": "integer"
+          },
+          "Maximun price": {
+            "type": "integer"
+          }
+          }
+        },
+        "Minimun M2": {
+          "type": "integer"
+        },
+        
+        "Kind": {
+          "type": "object",
+            "properties": {
+              "House": {
+                "type": "string"
+              },
+              "Townhouse": {
+                "type": "string"
+              },
+              "Edificio": {
+                "type": "string"
+              },
+              "Terreno": {
+                "type": "string"
+              },
+              "Local": {
+                "type": "string"
+              }
+          }
+      },
+      "Operation": {
+        "type": "object",
+          "properties": {
+            "Sell": {
+              "type": "string"
+            },
+            "Rent" : {
+              "type": "string"
+            }
+          }
+        }
+      
+      },
+      "title": "Search formulary"
+    }
+  },
+
+   
+"host": "virtserver.swaggerhub.com",
+"basePath": "/ajcorniel/KeystoneAPI/1.0"
+}
